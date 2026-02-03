@@ -26,12 +26,16 @@ const SingleProduct = () => {
         `/ecom/cart/add-product?userId=${userid}&productId=${productid}`
       )
       .then((response) => {
-        localStorage.setItem("cartid", response.data.cartId);
+        if (response.data?.cartId) {
+          localStorage.setItem("cartid", response.data.cartId);
+          console.log("✅ CartId updated from add-product:", response.data.cartId);
+        }
         alert("Product added to Cart.....");
         // 🔥 Hard refresh để cập nhật cart
         window.location.reload();
       })
       .catch((error) => {
+        console.error("❌ Error adding product:", error);
         alert("Product Alredy in cart......");
       });
   };

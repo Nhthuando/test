@@ -27,14 +27,22 @@ const Cart = () => {
     
   };
   const fetchCartData = () => {
+    if (!cartId) {
+      console.warn("⚠️ No cartId found in localStorage");
+      alert("Please login first");
+      return;
+    }
+    
+    console.log("🔄 Fetching cart data for cartId:", cartId);
     api
       .get(`/ecom/cart/products/${cartId}`)
       .then((response) => {
+        console.log("✅ Cart data received:", response.data);
         setCartData(response.data);
         setTotalAmount(response.data.totalAmount);
       })
       .catch((error) => {
-        console.error("Error fetching data from the API: ", error);
+        console.error("❌ Error fetching cart:", error);
       });
   };
 

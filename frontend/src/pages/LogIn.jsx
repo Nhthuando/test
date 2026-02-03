@@ -174,6 +174,9 @@ const Login = () => {
         // 🔥 Lưu cartId từ response
         if (response.data?.cartId) {
           localStorage.setItem("cartid", response.data.cartId);
+          console.log("✅ CartId saved:", response.data.cartId);
+        } else {
+          console.warn("⚠️ No cartId in login response:", response.data);
         }
 
         alert("Login successful ✅");
