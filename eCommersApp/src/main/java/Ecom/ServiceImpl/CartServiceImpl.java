@@ -1,6 +1,5 @@
 package Ecom.ServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import Ecom.Exception.ProductException;
 import Ecom.Exception.UserException;
 import Ecom.Model.Cart;
 import Ecom.Model.CartItem;
-import Ecom.Model.Product;
 import Ecom.Model.User;
 import Ecom.Repository.CartItemRepository;
 import Ecom.Repository.CartRepository;
@@ -171,18 +169,6 @@ public class CartServiceImpl implements CartService {
 	public Cart getAllCartProduct(Integer cartId) throws CartException {
 		Cart existingCart = cartRepository.findById(cartId).orElseThrow(() -> new CartException("Cart Not Found"));
 
-		List<CartItem> cartItems = existingCart.getCartItems();
-		List<Product> products = new ArrayList<>();
-
-		for (CartItem cartItem : cartItems) {
-			if (cartItem.getCart().getCartId() == cartId) {
-				Product product = cartItem.getProduct();
-				products.add(product);
-			}
-		}
-		if(products.isEmpty()){
-			throw new CartException("Cart is Empty...");
-		}
 		return existingCart;
 	}
 

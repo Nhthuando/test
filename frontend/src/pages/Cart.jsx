@@ -81,7 +81,7 @@ const Cart = () => {
 
   const decreaseCount = (productid) => {
     api
-      .put(`ecom/cart/decrease-productQty/${cartId}/${productid}`)
+      .put(`/ecom/cart/decrease-productQty/${cartId}/${productid}`)
       .then((response) => {
         setTotalAmount(response.data.totalAmount);
         fetchCartData();
