@@ -7,8 +7,8 @@ const Cart = () => {
   const navigate = useNavigate();
   const [cartData, setCartData] = useState({});
   const [totalAmount, setTotalAmount] = useState(0);
-  let cartId = localStorage.getItem("cartid");
-  let userId = localStorage.getItem("userid");
+  const [cartId, setCartId] = useState(() => localStorage.getItem("cartid"));
+  const userId = localStorage.getItem("userid");
 
   const apiCallOrderPlaced = () => {
     api
@@ -26,16 +26,16 @@ const Cart = () => {
     apiCallOrderPlaced();
     
   };
-  const fetchCartData = () => {
-    if (!cartId) {
+  const fetchCartData = (currentCartId) => {
+    if (!currentCartId) {
       console.warn("⚠️ No cartId found in localStorage");
       alert("Please login first");
       return;
     }
-    
-    console.log("🔄 Fetching cart data for cartId:", cartId);
+
+    console.log("🔄 Fetching cart data for cartId:", currentCartId);
     api
-      .get(`/ecom/cart/products/${cartId}`)
+      .get(`/ecom/cart/products/${currentCartId}`)
       .then((response) => {
         console.log("✅ Cart data received:", response.data);
         setCartData(response.data);
@@ -48,8 +48,21 @@ const Cart = () => {
 
   useEffect(() => {
     document.title = "Ecommerse | Cart";
-    fetchCartData();
-  }, [cartId, totalAmount]);
+    const currentCartId = localStorage.getItem("cartid");
+    setCartId(currentCartId);
+    fetchCartData(currentCartId);
+  }, [totalAmount]);
+
+  useEffect(() => {
+    const handleCartUpdated = () => {
+      const currentCartId = localStorage.getItem("cartid");
+      setCartId(currentCartId);
+      fetchCartData(currentCartId);
+    };
+
+    window.addEventListener("cartUpdated", handleCartUpdated);
+    return () => window.removeEventListener("cartUpdated", handleCartUpdated);
+  }, []);
   const emptyCart = () => {
     api
       .delete(`/ecom/cart/empty-Cart/${cartId}`)

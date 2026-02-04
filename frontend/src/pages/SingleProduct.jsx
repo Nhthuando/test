@@ -31,8 +31,7 @@ const SingleProduct = () => {
           console.log("✅ CartId updated from add-product:", response.data.cartId);
         }
         alert("Product added to Cart.....");
-        // 🔥 Hard refresh để cập nhật cart
-        window.location.reload();
+        window.dispatchEvent(new Event("cartUpdated"));
       })
       .catch((error) => {
         console.error("❌ Error adding product:", error);
